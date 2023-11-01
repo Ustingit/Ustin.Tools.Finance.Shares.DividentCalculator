@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ustin.Tools.Finance.Shares.DividentCalculator.Currencies;
 
 namespace Ustin.Tools.Finance.Shares.DividentCalculator.Models
 {
@@ -12,7 +13,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Models
 
 		public string ShareAbbreviation { get; set; }
 
-		public string Currency { get; set; }
+		public Currency Currency { get; set; }
 
 		public decimal Amount { get; set; }
 	}

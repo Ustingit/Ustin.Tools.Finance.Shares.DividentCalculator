@@ -71,6 +71,33 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Currencies
 
 	public static class Currencies
 	{
+		public static Currency TryGetUSD()
+		{
+			var result = AllAvailableCurrencies.SingleOrDefault(_ => _.CurrencyAbbr == "USD");
+
+			if (result == null) throw new InvalidOperationException(nameof(TryGetUSD));
+
+			return result;
+		}
+
+		public static Currency TryGetEuro()
+		{
+			var result = AllAvailableCurrencies.SingleOrDefault(_ => _.CurrencyAbbr == "USD");
+
+			if (result == null) throw new InvalidOperationException(nameof(TryGetEuro));
+
+			return result;
+		}
+
+		public static Currency TryGetZloty()
+		{
+			var result = AllAvailableCurrencies.SingleOrDefault(_ => _.CurrencyAbbr == "PLN");
+
+			if (result == null) throw new InvalidOperationException(nameof(TryGetZloty));
+
+			return result;
+		}
+
 		public static Currency[] AllAvailableCurrencies = new Currency[]
 		{
 			new Currency()

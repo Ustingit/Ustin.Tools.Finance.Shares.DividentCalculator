@@ -16,11 +16,12 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator
 			{
 				Amount = (decimal)50.95,
 				CompanyName = "Real Income",
-				Currency = "$",
+				Currency = Currencies.Currencies.TryGetUSD(),
 				DividendPayment = (decimal)0.256,
 				ShareAbbreviation = "O",
 				DividendPaymentDates = new Period(DateTime.Now, DateTime.Now.AddYears(4)).PeriodDatesByType(PeriodType.Month)
 			}).ToArray();
+
 			var calculator = new DailyAggregatingDividendCalculator(DateTime.Now, DateTime.Now.AddYears(3), (decimal)0.6, shares);
 			calculator.Calculate();
 
