@@ -18,7 +18,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Models
 		public decimal Amount { get; set; }
 	}
 	
-	public class DividendShare : Share
+	public class DividendShare : Share, ICloneable
 	{
 		public decimal DividendPayment { get; set; }
 
@@ -35,6 +35,19 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Models
 
 			dividendPaid = decimal.Zero;
 			return false;
+		}
+
+		public object Clone()
+		{
+			return new DividendShare()
+			{
+				Amount = Amount,
+				CompanyName = CompanyName,
+				Currency = Currency,
+				DividendPayment = DividendPayment,
+				ShareAbbreviation = ShareAbbreviation,
+				DividendPaymentDates = DividendPaymentDates
+			};
 		}
 	}
 }

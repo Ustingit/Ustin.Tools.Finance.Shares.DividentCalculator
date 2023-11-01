@@ -20,7 +20,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 			_startDate = startDate;
 			_endDate = endDate;
 			_taxProportion = taxProportion;
-			_shares = shares.OfType<DividendShare>().ToArray();
+			_shares = shares.OfType<DividendShare>().ToArray(); // this exact calculator works only with dividend ones
 			_initialAmountOfShares = _shares.Length;
 		}
 
@@ -37,7 +37,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 			var baseShare = _shares[0]; //extremely wrong approach
 			decimal totalSum = _shares.Sum(_ => _.Amount);
 			decimal notRealizedSum = decimal.Zero;
-			Console.WriteLine($"Starting calculating for date range {_startDate.ToShortDateString()} - {_endDate.ToShortDateString()}. Initial sum on balance = {totalSum} {currency}");
+			Console.WriteLine($"Starting calculating for date range {_startDate.ToShortDateString()} - {_endDate.ToShortDateString()}. Initial sum on balance = {totalSum} {currency.CurrencySign}");
 
 			var currentDate = _startDate;
 			var year = currentDate.Year;
@@ -79,7 +79,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 
 				if (newDate.Month != currentDate.Month)
 				{
-					Console.WriteLine($"At the end of the month {currentDate.Month} of {currentDate.Year} you have {_shares.Sum(_ => _.Amount)} {currency} in shares and {notRealizedSum} {currency} of unrealized money.");
+					Console.WriteLine($"At the end of the month {currentDate.Month} of {currentDate.Year} you have {_shares.Sum(_ => _.Amount)} {currency.CurrencySign} in shares and {notRealizedSum} {currency} of unrealized money.");
 				}
 
 				if (newDate.Year != currentDate.Year)
@@ -90,7 +90,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 				currentDate = newDate;
 			}
 
-			Console.WriteLine($"End calculation, final sum is {_shares.Sum(_ => _.Amount)} {currency} and {notRealizedSum} {currency} of unrealized money.");
+			Console.WriteLine($"End calculation, final sum is {_shares.Sum(_ => _.Amount)} {currency.CurrencySign} and {notRealizedSum} {currency.CurrencySign} of unrealized money.");
 		}
 
 		private void BuyNewShares(DividendShare[] newShares)
