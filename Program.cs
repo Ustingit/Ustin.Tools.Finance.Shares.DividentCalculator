@@ -15,7 +15,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator
 			Console.WriteLine($"--> Starting at {DateTime.Now.ToShortDateString()}.");
 
 			var share = ShareSamples.GetByShareAbbr("O",
-				new Period(DateTime.Now, DateTime.Now.AddYears(4)).PeriodDatesByType(PeriodType.Month)) as DividendShare;
+				new FractionedPeriod(DateTime.Now, DateTime.Now.AddYears(4)).PeriodDatesByType(PeriodType.Month)) as DividendShare;
 			var shares = share.MultiplyDividendOne(20);
 
 			var calculator = new DailyAggregatingDividendCalculator(DateTime.Now, 

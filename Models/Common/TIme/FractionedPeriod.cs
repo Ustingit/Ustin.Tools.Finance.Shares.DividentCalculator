@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ustin.Tools.Finance.Shares.DividentCalculator.Models.Common.TIme
 {
-	public class Period
+	public class FractionedPeriod : Period
 	{
 		private DateTime[] _periodDates;
 
-		public Period(DateTime from, DateTime to)
+		public FractionedPeriod(DateTime from, DateTime to) 
+			: base(from, to)
 		{
 			From = from;
 			To = to;
@@ -81,6 +79,19 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Models.Common.TIme
 			_periodDates = result.ToArray();
 			return _periodDates;
 		}
+	}
+
+	public class Period
+	{
+		public Period(DateTime from, DateTime to)
+		{
+			From = from;
+			To = to;
+		}
+
+		public DateTime From { get; private set; }
+
+		public DateTime To { get; private set; }
 	}
 
 	public enum PeriodType

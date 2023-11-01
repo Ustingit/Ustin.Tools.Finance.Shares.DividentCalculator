@@ -20,7 +20,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.StubData
 				Currency = Currencies.Currencies.TryGetUSD(),
 				DividendPayment = (decimal)0.256,
 				ShareAbbreviation = "O",
-				DividendPaymentDates = new Period(DateTime.Now, DateTime.Now.AddYears(10)).PeriodDatesByType(PeriodType.Month)
+				DividendPaymentDates = new FractionedPeriod(DateTime.Now, DateTime.Now.AddYears(10)).PeriodDatesByType(PeriodType.Month)
 			}
 		};
 
