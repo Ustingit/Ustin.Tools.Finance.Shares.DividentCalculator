@@ -18,8 +18,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator
 				new FractionedPeriod(DateTime.Now, DateTime.Now.AddYears(4)).PeriodDatesByType(PeriodType.Month)) as DividendShare;
 			var shares = share.MultiplyDividendOne(20);
 
-			var calculator = new DailyAggregatingDividendCalculator(DateTime.Now, 
-				DateTime.Now.AddYears(3), 
+			var calculator = new DailyAggregatingDividendCalculator(new Period(DateTime.Now, DateTime.Now.AddYears(3)), 
 				(decimal)0.6,
 				shares);
 			calculator.Calculate();

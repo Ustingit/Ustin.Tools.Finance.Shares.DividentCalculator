@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ustin.Tools.Finance.Shares.DividentCalculator.Models;
+using Ustin.Tools.Finance.Shares.DividentCalculator.Models.Common.TIme;
 
 namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 {
@@ -15,10 +14,10 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 		private DividendShare[] _shares;
 		private int _initialAmountOfShares;
 
-		public DailyAggregatingDividendCalculator(DateTime startDate, DateTime endDate, decimal taxProportion, Share[] shares)
+		public DailyAggregatingDividendCalculator(Period period, decimal taxProportion, Share[] shares)
 		{
-			_startDate = startDate;
-			_endDate = endDate;
+			_startDate = period.From;
+			_endDate = period.To;
 			_taxProportion = taxProportion;
 			_shares = shares.OfType<DividendShare>().ToArray(); // this exact calculator works only with dividend ones
 			_initialAmountOfShares = _shares.Length;
