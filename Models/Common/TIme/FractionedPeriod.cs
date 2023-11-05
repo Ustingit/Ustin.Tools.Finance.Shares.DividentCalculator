@@ -1,17 +1,22 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Ustin.Tools.Finance.Shares.DividentCalculator.Models.Common.TIme
 {
-	public class FractionedPeriod : Period
+	public class FractionedPeriod : Period, IEnumerable<DateTime>
 	{
 		private DateTime[] _periodDates;
+		private readonly PeriodType _periodType;
+		private DateTime _currentIterationDate;
 
-		public FractionedPeriod(DateTime from, DateTime to) 
+		public FractionedPeriod(DateTime from, DateTime to, PeriodType type = PeriodType.Month) 
 			: base(from, to)
 		{
 			From = from;
+			_currentIterationDate = from;
 			To = to;
+			_periodType = type;
 			_periodDates = null;
 		}
 
@@ -32,43 +37,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Models.Common.TIme
 
 			while (currentDate < To)
 			{
-				DateTime newDate;
-
-				switch (type)
-				{
-					case PeriodType.Second:
-						newDate = currentDate.AddSeconds(1);
-						break;
-					case PeriodType.Minute:
-						newDate = currentDate.AddMinutes(1);
-						break;
-					case PeriodType.Hour:
-						newDate = currentDate.AddHours(1);
-						break;
-					case PeriodType.HalfDay:
-						newDate = currentDate.AddHours(12);
-						break;
-					case PeriodType.Day:
-						newDate = currentDate.AddDays(1);
-						break;
-					case PeriodType.Week:
-						newDate = currentDate.AddDays(7);
-						break;
-					case PeriodType.Month:
-						newDate = currentDate.AddMonths(1);
-						break;
-					case PeriodType.Quarter:
-						newDate = currentDate.AddMonths(3);
-						break;
-					case PeriodType.HalfYear:
-						newDate = currentDate.AddMonths(6);
-						break;
-					case PeriodType.Year:
-						newDate = currentDate.AddYears(1);
-						break;
-					default:
-						throw new InvalidOperationException(nameof(type));
-				}
+				DateTime newDate = GetNextDate(currentDate);
 
 				result.Add(newDate);
 				currentDate = newDate;
@@ -78,6 +47,80 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Models.Common.TIme
 
 			_periodDates = result.ToArray();
 			return _periodDates;
+		}
+
+		private DateTime GetNextDate(DateTime source)
+		{
+			switch (_periodType)
+			{
+				case PeriodType.Second:
+					return source.AddSeconds(1);
+				case PeriodType.Minute:
+					return source.AddMinutes(1);
+				case PeriodType.Hour:
+					return source.AddHours(1);
+				case PeriodType.HalfDay:
+					return source.AddHours(12);
+				case PeriodType.Day:
+					return source.AddDays(1);
+				case PeriodType.Week:
+					return source.AddDays(7);
+				case PeriodType.Month:
+					return source.AddMonths(1);
+				case PeriodType.Quarter:
+					return source.AddMonths(3);
+				case PeriodType.HalfYear:
+					return source.AddMonths(6);
+				case PeriodType.Year:
+					return source.AddYears(1);
+				default:
+					throw new InvalidOperationException(nameof(_periodType));
+			}
+		}
+
+		public IEnumerator<DateTime> GetEnumerator()
+		{
+			return new FractionedTimerEnumerator(this);
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		private class FractionedTimerEnumerator : IEnumerator<DateTime>
+		{
+			private readonly FractionedPeriod _period;
+
+			public FractionedTimerEnumerator(FractionedPeriod period)
+			{
+				_period = period;
+			}
+
+			public bool MoveNext()
+			{
+				var hasNext  = _period.GetNextDate(_period._currentIterationDate) <= _period.To;
+
+				if (hasNext)
+				{
+					_period._currentIterationDate = _period.GetNextDate(_period._currentIterationDate);
+				}
+
+				return hasNext;
+			}
+
+			public void Reset()
+			{
+				_period._currentIterationDate = _period.From;
+			}
+
+			public DateTime Current => _period._currentIterationDate;
+
+			object IEnumerator.Current => Current;
+
+			public void Dispose()
+			{
+			}
 		}
 	}
 
