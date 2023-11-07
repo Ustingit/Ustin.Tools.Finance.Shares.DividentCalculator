@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ustin.Tools.Finance.Shares.DividentCalculator.Models;
-using Ustin.Tools.Finance.Shares.DividentCalculator.Models.Common.TIme;
+using Ustin.Tools.TimeMachine.Models.Time;
 
 namespace Ustin.Tools.Finance.Shares.DividentCalculator.StubData
 {
@@ -15,7 +12,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.StubData
 		{
 			new DividendShare()
 			{
-				Amount = (decimal)50.95,
+				Price = (decimal)50.95,
 				CompanyName = "Real Income",
 				Currency = Currencies.Currencies.TryGetUSD(),
 				DividendPayment = (decimal)0.256,

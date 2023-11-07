@@ -15,7 +15,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Models
 
 		public Currency Currency { get; set; }
 
-		public decimal Amount { get; set; }
+		public decimal Price { get; set; }
 	}
 	
 	public class DividendShare : Share, ICloneable
@@ -41,7 +41,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Models
 		{
 			return new DividendShare()
 			{
-				Amount = Amount,
+				Price = Price,
 				CompanyName = CompanyName,
 				Currency = Currency,
 				DividendPayment = DividendPayment,

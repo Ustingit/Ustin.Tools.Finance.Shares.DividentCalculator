@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ustin.Tools.Finance.Shares.DividentCalculator.Models;
-using Ustin.Tools.Finance.Shares.DividentCalculator.Models.Common.TIme;
+using Ustin.Tools.TimeMachine.Models.Time;
 
 namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 {
@@ -12,7 +12,6 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 		private DateTime _endDate;
 		private decimal _taxProportion;
 		private DividendShare[] _shares;
-		private int _initialAmountOfShares;
 
 		public DailyAggregatingDividendCalculator(Period period, decimal taxProportion, Share[] shares)
 		{
@@ -20,7 +19,6 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 			_endDate = period.To;
 			_taxProportion = taxProportion;
 			_shares = shares.OfType<DividendShare>().ToArray(); // this exact calculator works only with dividend ones
-			_initialAmountOfShares = _shares.Length;
 		}
 
 		public void Calculate()
@@ -32,9 +30,9 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 			}
 
 			var currency = _shares[0].Currency;
-			var oneSharePrice = _shares[0].Amount;
+			var oneSharePrice = _shares[0].Price;
 			var baseShare = _shares[0]; //extremely wrong approach
-			decimal totalSum = _shares.Sum(_ => _.Amount);
+			decimal totalSum = _shares.Sum(_ => _.Price);
 			decimal notRealizedSum = decimal.Zero;
 			Console.WriteLine($"Starting calculating for date range {_startDate.ToShortDateString()} - {_endDate.ToShortDateString()}. Initial sum on balance = {totalSum} {currency.CurrencySign}");
 
@@ -61,7 +59,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 					{
 						sharesToBuy.Add(new DividendShare()
 						{
-							Amount = baseShare.Amount,
+							Price = baseShare.Price,
 							Currency = baseShare.Currency,
 							CompanyName = baseShare.CompanyName,
 							DividendPaymentDates = baseShare.DividendPaymentDates,
@@ -78,7 +76,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 
 				if (newDate.Month != currentDate.Month)
 				{
-					Console.WriteLine($"At the end of the month {currentDate.Month} of {currentDate.Year} you have {_shares.Sum(_ => _.Amount)} {currency.CurrencySign} in shares and {notRealizedSum} {currency} of unrealized money.");
+					Console.WriteLine($"At the end of the month {currentDate.Month} of {currentDate.Year} you have {_shares.Sum(_ => _.Price)} {currency.CurrencySign} in shares and {notRealizedSum} {currency} of unrealized money.");
 				}
 
 				if (newDate.Year != currentDate.Year)
@@ -89,7 +87,7 @@ namespace Ustin.Tools.Finance.Shares.DividentCalculator.Calculators
 				currentDate = newDate;
 			}
 
-			Console.WriteLine($"End calculation, final sum is {_shares.Sum(_ => _.Amount)} {currency.CurrencySign} and {notRealizedSum} {currency.CurrencySign} of unrealized money.");
+			Console.WriteLine($"End calculation, final sum is {_shares.Sum(_ => _.Price)} {currency.CurrencySign} and {notRealizedSum} {currency.CurrencySign} of unrealized money.");
 		}
 
 		private void BuyNewShares(DividendShare[] newShares)
